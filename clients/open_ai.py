@@ -64,7 +64,7 @@ class OpenAIClient(object):
     def custom_prompt(self, prompt: str) -> str:
         if prompt is None or prompt == "" :
             raise Exception("cannot request with empty prompt.")
-        elif len(prompt < self._minimum_prompt_len):
+        elif len(prompt) < self._minimum_prompt_len:
             raise Exception(f"prompt length cannot be less than {self._minimum_prompt_len}.")
 
         model, openai_obj = self._get_basic_specs()
@@ -72,7 +72,7 @@ class OpenAIClient(object):
         message_dd = self._prepare_message(prompt=prompt)
         final_dd = {
             "model": model,
-            "content": [message_dd]
+            "messages": [message_dd]
         }
         response = openai_obj.ChatCompletion.create(**final_dd)
         response_from_gpt = response.choices[0].message["content"]
