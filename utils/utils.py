@@ -1,19 +1,20 @@
 import re
 
 
-def format_code_response(response):
-    code_start = response.find("```python")
-    code_end = response.find("```", code_start + len("```python"))
+def format_code_blocks(text):
+    def format_code(match):
+        code = match.group(1)
+        formatted_code = f"<pre><code>{code}</code></pre>"
+        return formatted_code.replace("\n", "<br>").replace(" ", "&nbsp;")
 
-    if code_start != -1 and code_end != -1:
-        code = response[code_start + len("```python"):code_end].strip()
+    formatted_text = re.sub(r"```python(.*?)```", format_code, text, flags=re.DOTALL)
+    return formatted_text
 
-        formatted_response = (
-                response[:code_start] +
-                f"<pre><code class='language-python'>{code}</code></pre>" +
-                response[code_end + len("```"):]
-        )
-        return formatted_response
+
+def detect_language(text: str) -> str:
+    match = re.search(r"```(\w+)", text)
+    if match:
+        response = match.group(1)
     else:
-        return response
-
+        response = "unknown"
+    return response
