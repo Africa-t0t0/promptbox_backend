@@ -10,12 +10,6 @@ from utils import utils
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def home():
-    client = apis.get_apis(api="open_ai")
-    client.test_prompt()
-    return "¡Hola, Flask!"
-
 
 @app.route("/query-gpt", methods=["POST"])
 def query_gpt():
