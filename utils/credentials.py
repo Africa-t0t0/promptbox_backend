@@ -11,3 +11,13 @@ def get_openai_credentials() -> dict:
     }
     return dd
 
+
+def server_configuration() -> dict:
+    dd = {
+        "auth_server_url": os.getenv("AUTHSERVER_URL"),
+        "environment": os.getenv("ENVIRONMENT"),
+        "port": os.getenv("PORT")
+    }
+
+    return dd
+

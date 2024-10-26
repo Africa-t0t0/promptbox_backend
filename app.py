@@ -1,11 +1,7 @@
-import openai
-import os
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from utils import apis
-from utils import utils
+from utils import apis, decorators, handlers, utils
 
 app = Flask(__name__)
 CORS(app)
@@ -37,6 +33,7 @@ def query_gpt():
 
 
 @app.route("/dummy", methods=["GET"])
+@decorators.validate_token
 def dummy():
     text = "Aquí tienes un ejemplo de código en Python que lee un archivo CSV y lo convierte en un archivo PDF utilizando la librería pandas y matplotlib: ```python import pandas as pd import matplotlib.pyplot as plt # Leer el archivo CSV df = pd.read_csv('archivo.csv') # Crear visualización de los datos plt.figure(figsize=(10, 6)) plt.table(cellText=df.values, colLabels=df.columns, loc='center') plt.axis('off') plt.savefig('output.pdf') plt.close() ``` Este código lee un archivo CSV llamado 'archivo.csv', crea una visualización de los datos en forma de tabla y guarda esta visualización como un archivo PDF llamado 'output.pdf'. Recuerda que necesitarás instalar las librerías pandas y matplotlib para poder ejecutar este código."
     response_dd = {
@@ -47,4 +44,9 @@ def dummy():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    cleaned_dd = handlers.handle_server_configuration()
+
+    debug = cleaned_dd["debug"]
+    port = cleaned_dd["port"]
+
+    app.run(debug=debug, port=port)
