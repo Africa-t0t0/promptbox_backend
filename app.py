@@ -8,10 +8,11 @@ CORS(app)
 
 
 @app.route("/query-gpt", methods=["POST"])
+@decorators.validate_token
 def query_gpt():
-    data = request.get_json()
+    data_dd = request.get_json()
     try:
-        prompt = data["prompt"]
+        prompt = data_dd["prompt"]
         client = apis.get_apis(api="open_ai")
         response = client.custom_prompt(prompt=prompt)
         language = utils.detect_language(text=response)
