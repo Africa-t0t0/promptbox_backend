@@ -21,12 +21,10 @@ def query_gpt():
             "response": response,
             "language": language
         }
-        print("resp", response)
         status = 200
     except Exception as exc:
-        print("exception found", exc)
         response_dd = {
-            "message": "Ocurrió un error, comunique al administrador.",
+            "message": f"Error: {exc}",
             "response": "error",
         }
         status = 400
